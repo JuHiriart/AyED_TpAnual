@@ -5,6 +5,10 @@
 
 using namespace std;
 
+void cargaTabla(int **tabla,int puntaje, int jugador){
+	
+}
+
 int tirar(int juego[]){
 	
 	for(int i=0; i<5; i++){
@@ -18,10 +22,9 @@ int tirar(int juego[]){
 		
 }
 
-void initMatrix(/*aca va la matriz por referencia*/);
 
 /*
-int jugar(int tabla[][], int juego[], int jugador){
+int jugar(int ***tabla, int juego[], int jugador){
 	
 	int puntaje = 0;
 	
@@ -53,16 +56,27 @@ int jugar(int tabla[][], int juego[], int jugador){
 	
 	if((f1==1 && f2==1 && f3==1 && f4==1 && f5==1) || (f2==1 && f3==1 && f4==1 && f5==1 && f6==1) || (f3==1 && f4==1 && f5==1 && f6==1 && f1==1)){
 		puntaje = 25;
-		cargaTabla(puntaje, jugador);
+		cargaTabla(tabla, puntaje, jugador);
 		cout << "hay escalera";
-		return;
+		return 0;
 	}
 	
 }
 */
-void cargaTabla(int puntaje, int jugador){
-	
+
+
+int initMatrix(int tabla[5][11], int jugadores){
+
+	for(int i=0; i<jugadores; i++)
+	{
+		for(int j=0; j<11; j++)
+		{
+			tabla[i][j]=-1;
+		}
+	}
+	return 0;
 }
+
 
 
 int main() {
@@ -74,15 +88,12 @@ int main() {
 	cout << "Ingrese cantidad de jugadores (3 a 5)" << endl;
 	cin >> jugadores;
 	
-	int tabla[jugadores][11];
+	int tabla[5][11];
 	
 	//init de matriz
-	for(int i=0; i<jugadores; i++){
-		for(int j=0; j<11; j++){
-			tabla[i][j]=-1;
-		}
-	}
+	initMatrix(tabla, jugadores);
 	
+	//debug matriz
 	for(int i=0; i<jugadores; i++){
 		for(int j=0; j<11; j++){
 			cout << tabla[i][j];

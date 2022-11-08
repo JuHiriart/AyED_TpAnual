@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdlib>
-
+#include <ctime>
 
 
 using namespace std;
@@ -20,24 +20,21 @@ int cargaTabla(int tabla[11][5],int puntaje, int jugador, int fila){
 
 void tirar(int juego[3][5]){
 	
-	for (int j = 0; j < 3; j++)
-	{
+	
+	
+	for (int j=0; j<3; j++){
 		for(int i=0; i<5; i++){
-			juego[j][i] = 1+ (rand() % (5 + 1));
+			juego[j][i] = 1 + (rand() % (5 + 1));
 		}
 	}
-	
-
 	
 	//debug
 	for (int j=0; j<3; j++){
 		for(int i=0; i<5; i++){
-		cout << juego[j][i];
+			cout << juego[j][i];
 		}
 		cout << endl;
 	}
-	
-
 		
 }
 
@@ -488,6 +485,8 @@ int initMatrix(int tabla[11][5], int jugadores){
 
 int main() {
 	
+	srand (time (0));
+	
 	int jugadores;
 	int juego[3][5];
 	int jugador = 0;
@@ -525,7 +524,9 @@ int main() {
 	}
 	
 	//debuggeo de matriz 2
+	char nombreColumna[11] = {'1','2','3','4','5','6','E','F','P','G','D'};
 	for(int i=0; i<11; i++){
+		cout << nombreColumna[i] << ": ";
 		for(int j=0; j<jugadores; j++){
 			cout << tabla[i][j] << " ";
 		}

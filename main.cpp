@@ -295,7 +295,7 @@ int jugar(int tabla[11][5], int juego[3][5], int jugador){
 
 	//lógica numérica
 
-	cout << "buscando mejor número..." << endl;
+	cout << "buscando mejor numero..." << endl;
 
 	for(int j=0; j<3; j++){
 
@@ -484,16 +484,40 @@ int initMatrix(int tabla[11][5], int jugadores){
 	return 0;
 }
 
+struct nombreJugador{
+	char nombre[20];
+	
+};
 
+struct Fecha{
+	int dia;
+	int mes; 
+	int anio;
+};
 
 int main() {
 	
 	int jugadores;
 	int juego[3][5];
 	int jugador = 0;
+	int j,i;
+	nombreJugador nombres[5];
+	Fecha fecha;
+	
+	
 	
 	cout << "Ingrese cantidad de jugadores (3 a 5)" << endl;
 	cin >> jugadores;
+	
+	for(i = 0; i < jugadores;i++){
+		cout << "Ingrese nombre del jugador " << i+1 << endl;
+		cin >> nombres[i].nombre;
+	}
+	cout << "Ingrese la fecha" << endl;
+	cout << "A�o: "; cin >> fecha.anio;
+	cout << "Mes: "; cin >> fecha.mes;
+	cout << "Dia: "; cin >> fecha.dia;
+	
 	
 	int tabla[11][5];
 	
@@ -502,6 +526,7 @@ int main() {
 	
 	//debug matriz
 	for(int i=0; i<11; i++){
+		
 		for(int j=0; j<jugadores; j++){
 			cout << tabla[i][j] << " ";
 		}
@@ -512,7 +537,7 @@ int main() {
 	for(int i=0; i<11; i++){
 		for(int j=0; j<jugadores; j++){
 			
-			cout << endl << endl << "jugador número " << j+1 << " de " << jugadores << endl;
+			cout << endl << endl << "tiro numero " << i+1 << " de " << nombres[j].nombre << endl;
 
 			tirar(juego);
 			jugar(tabla, juego, jugador);

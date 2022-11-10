@@ -481,9 +481,9 @@ int initMatrix(int tabla[11][5], int jugadores){
 	return 0;
 }
 
+
 struct nombreJugador{
 	char nombre[20];
-	
 };
 
 struct Fecha{
@@ -491,6 +491,14 @@ struct Fecha{
 	int mes; 
 	int anio;
 };
+
+struct jugada{
+	int idJugada;
+	nombreJugador nombre;
+	Fecha fecha;
+	int puntaje;
+};
+
 
 int main() {
 	
@@ -557,6 +565,67 @@ int main() {
 		}
 		cout << endl;
 	}
+	
+	
+	//calcular puntaje
+		
+	int puntaje = 0;
+	int aux = 0;
+	int pos = 0;
+	
+	for(int i=0; i<jugadores; i++){
+		aux = 0;
+		for(int j=0; j<11; j++){	
+		
+			aux += tabla[j][i];	
+				
+		}
+		
+		if (aux > puntaje){
+			puntaje = aux;
+			pos = i;
+		}
+
+	}
+	
+	
+	
+	//carga del archivo binario
+	
+	
+	jugada highscore;
+	
+	FILE* f = fopen("generalaHighscores.dat", "r+b");
+	
+	int id=0;
+	highscore.idJugada = 0;
+	
+	fseek(f, -sizeof(jugada),SEEK_END);
+	
+	if(fread(&highscore, sizeof(jugada),1,f)){
+		cout << "ESTOY EN EL IF";
+		id = highscore.idJugada + 1;
+	}
+	highscore.idJugada = id;
+	
+	fclose(f);
+	
+
+	
+	highscore.puntaje = puntaje;
+	highscore.nombre = nombres[pos];
+	highscore.idJugada = id;
+	highscore.fecha = fecha;
+	
+	f = fopen("generalaHighscores.dat","a+b");
+	fwrite(&highscore,sizeof(jugada),1,f);
+	fclose(f);
+	
+	f = fopen("generalaHighscores.dat","r+b");
+	while(fread(&highscore, sizeof(jugada),1,f)){
+		cout << "id: " << highscore.idJugada << endl << "nombere: " << highscore.nombre.nombre << endl << "fecha: " << highscore.fecha.dia << "/" << highscore.fecha.mes << "/" << highscore.fecha.anio << endl << "puntaje: " << highscore.puntaje << endl << endl;		
+	}
+	fclose(f);
 	
 	
 	return 0;

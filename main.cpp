@@ -513,10 +513,10 @@ nodo* insertarOrdenado(nodo* &lista, jugada x){
 	else {
 		nodo* q = lista;
 	while(q->sgte != NULL && x.puntaje<q->sgte->info.puntaje){
-		q = q->sgte;
-		p->sgte = q->sgte;
-		q->sgte = p;
+		q = q->sgte;	
 	}
+	p->sgte = q->sgte;
+	q->sgte = p;
 }
 	return p;
 	}

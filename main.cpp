@@ -44,9 +44,9 @@ int jugar(int tabla[11][5], int juego[3][5], int jugador){
 	
 	int puntaje = 0;
 	int fila = -1;
-	int f1, f2, f3, f4, f5, f6; //flags de n煤meros
+	int f1, f2, f3, f4, f5, f6; //flags de numeros
 
-	//l贸gica generala servida
+	//logica generala servida
 
 	cout << "buscando generala servida..." << endl;
 
@@ -151,7 +151,7 @@ int jugar(int tabla[11][5], int juego[3][5], int jugador){
 
 	cout << "no hay generala" << endl;
 
-	//l贸gica poker
+	//logica poker
 	cout << "buscando poker..." << endl;
 
 
@@ -198,7 +198,7 @@ int jugar(int tabla[11][5], int juego[3][5], int jugador){
 	cout << "no hay poker" << endl;
 
 
-	//l贸gica full
+	//logica full
 
 	cout << "buscando full..." << endl;
 
@@ -244,7 +244,7 @@ int jugar(int tabla[11][5], int juego[3][5], int jugador){
 
 	cout << "no hay full" << endl;
 
-	//l贸gica de escalera
+	//logica de escalera
 	
 	cout << "buscando escalera..." << endl;
 
@@ -290,7 +290,7 @@ int jugar(int tabla[11][5], int juego[3][5], int jugador){
 	
 	cout << "no hay escalera" << endl;
 
-	//l贸gica num茅rica
+	//logica numerica
 
 	cout << "buscando mejor numero..." << endl;
 
@@ -499,6 +499,37 @@ struct jugada{
 	int puntaje;
 };
 
+struct nodo{
+	jugada info;
+	nodo* sgte;
+};
+
+nodo* insertarOrdenado(nodo* &lista, jugada x){
+	nodo* p =new nodo();
+	p->info = x;
+	if(lista ==NULL || x.puntaje>lista->info.puntaje){
+		p->sgte = lista; lista = p;
+	}
+	else {
+		nodo* q = lista;
+	while(q->sgte != NULL && x.puntaje<q->sgte->info.puntaje){
+		q = q->sgte;
+		p->sgte = q->sgte;
+		q->sgte = p;
+	}
+}
+	return p;
+	}
+nodo* buscar (nodo* &lista, jugada x){
+	nodo* p = lista;
+	while(p != NULL && p->info.puntaje != x.puntaje) p= p->sgte;
+	return p;
+}
+nodo* cargarSinRepetir (nodo* &lista, jugada x){
+	nodo* p= buscar(lista,x);
+	if(p==NULL) p=insertarOrdenado(lista,x);
+	return p;
+}
 
 int main() {
 	
@@ -590,7 +621,7 @@ int main() {
 	
 	
 	
-	//carga del archivo binario
+	//carga y lectura del archivo binario
 	
 	
 	jugada highscore;
@@ -603,7 +634,7 @@ int main() {
 	fseek(f, -sizeof(jugada),SEEK_END);
 	
 	if(fread(&highscore, sizeof(jugada),1,f)){
-		cout << "ESTOY EN EL IF";
+		cout << "ESTOY EN EL IF" << endl;
 		id = highscore.idJugada + 1;
 	}
 	highscore.idJugada = id;
@@ -623,10 +654,19 @@ int main() {
 	
 	f = fopen("generalaHighscores.dat","r+b");
 	while(fread(&highscore, sizeof(jugada),1,f)){
-		cout << "id: " << highscore.idJugada << endl << "nombere: " << highscore.nombre.nombre << endl << "fecha: " << highscore.fecha.dia << "/" << highscore.fecha.mes << "/" << highscore.fecha.anio << endl << "puntaje: " << highscore.puntaje << endl << endl;		
+		cout << "id: " << highscore.idJugada << endl << "nombre: " << highscore.nombre.nombre << endl << "fecha: " << highscore.fecha.dia << "/" << highscore.fecha.mes << "/" << highscore.fecha.anio << endl << "puntaje: " << highscore.puntaje << endl << endl;		
 	}
 	fclose(f);
 	
+	//creaci髇 y actualizaci髇 del ranking de los 3 mejores
 	
+	f = fopen("generalaHighscores.dat","r+b");
+	while(fread(&highscore, sizeof(jugada),1,f)){
+	nodo* lista = NULL;
+	cargarSinRepetir(lista,highscore);
+	}
+	fclose(f);
+
+
 	return 0;
 }

@@ -590,7 +590,7 @@ int main() {
 	
 	
 	
-	//carga del archivo binario
+	//carga y lectura del archivo binario
 	
 	
 	jugada highscore;
@@ -624,6 +624,14 @@ int main() {
 	f = fopen("generalaHighscores.dat","r+b");
 	while(fread(&highscore, sizeof(jugada),1,f)){
 		cout << "id: " << highscore.idJugada << endl << "nombere: " << highscore.nombre.nombre << endl << "fecha: " << highscore.fecha.dia << "/" << highscore.fecha.mes << "/" << highscore.fecha.anio << endl << "puntaje: " << highscore.puntaje << endl << endl;		
+	}
+	fclose(f);
+	
+	//creación y actualización del ranking de los 3 mejores
+	
+	f = fopen("generalaHighscores.dat","r+b");
+	while(fread(&highscore, sizeof(jugada),1,f)){
+				
 	}
 	fclose(f);
 	

@@ -461,9 +461,82 @@ int jugar(int tabla[11][5], int juego[3][5], int jugador){
 
 		}
 		
-	}
+	
+		cout << "no hay triples ni dobles" << endl;
+	
+		if((f1==1||f2==1||f3==1||f4==1||f5==1||f6==1)){
+			
+			if (f1==1)
+			{
+				puntaje = 1*1;
+				fila = 0;
+				if (cargaTabla(tabla, puntaje, jugador, fila))
+				{
+					cout << "hay unos" << endl;
+					return 0;
+				}
+			}
+			
+			if (f2==1)
+			{
+				puntaje = 2*1;
+				fila = 1;
+				if (cargaTabla(tabla, puntaje, jugador, fila))
+				{
+					cout << "hay dos" << endl;
+					return 0;
+				}
+			}
 
-	cout << "no hay triples ni dobles" << endl;
+			if (f3==1)
+			{
+				puntaje = 3*1;
+				fila = 2;
+				if (cargaTabla(tabla, puntaje, jugador, fila))
+				{
+					cout << "hay 3" << endl;
+					return 0;
+				}
+			}
+
+			if (f4==1)
+			{
+				puntaje = 4*1;
+				fila = 3;
+				if (cargaTabla(tabla, puntaje, jugador, fila))
+				{
+					cout << "hay cuatros" << endl;
+					return 0;
+				}
+			}
+
+			if (f5==1)
+			{
+				puntaje = 5*1;
+				fila = 4;
+				if (cargaTabla(tabla, puntaje, jugador, fila))
+				{
+					cout << "hay cincos" << endl;
+					return 0;
+				}
+			}
+
+			if (f6==1)
+			{
+				puntaje = 6*1;
+				fila = 5;
+				if (cargaTabla(tabla, puntaje, jugador, fila))
+				{
+					cout << "hay seis" << endl;
+					return 0;
+				}
+			}
+
+		}
+		
+		cout << "no hay números para cargar" << endl;
+		
+	}
 
 }
 
@@ -507,29 +580,49 @@ struct nodo{
 nodo* insertarOrdenado(nodo* &lista, jugada x){
 	nodo* p =new nodo();
 	p->info = x;
-	if(lista ==NULL || x.puntaje>lista->info.puntaje){
-		p->sgte = lista; lista = p;
+	if(lista == NULL || x.puntaje >= lista->info.puntaje){
+		p->sgte = lista;
+		lista = p;
 	}
 	else {
 		nodo* q = lista;
-	while(q->sgte != NULL && x.puntaje<q->sgte->info.puntaje){
-		q = q->sgte;	
+		while(q->sgte != NULL && x.puntaje <= q->sgte->info.puntaje){
+			q = q->sgte;	
+		}
+		p->sgte = q->sgte;
+		q->sgte = p;
 	}
-	p->sgte = q->sgte;
-	q->sgte = p;
-}
 	return p;
-	}
+}
+
 nodo* buscar (nodo* &lista, jugada x){
 	nodo* p = lista;
-	while(p != NULL && p->info.puntaje != x.puntaje) p= p->sgte;
+	while(p != NULL && p->info.puntaje != x.puntaje){
+		p = p->sgte;
+	} 
 	return p;
 }
+
 nodo* cargarSinRepetir (nodo* &lista, jugada x){
-	nodo* p= buscar(lista,x);
-	if(p==NULL) p=insertarOrdenado(lista,x);
+	nodo* p = buscar(lista,x);
+	if(p == NULL){
+		p = insertarOrdenado(lista,x);
+	} 
 	return p;
 }
+
+
+jugada pop(nodo*& pila){ 
+	jugada x; 
+	nodo* p = pila; 
+	x = pila->info; 	
+	pila = p->sgte; 
+	delete p; 
+	return x; 
+}
+
+
+
 
 int main() {
 	
@@ -619,10 +712,10 @@ int main() {
 
 	}
 	
-	
+	cout << endl << "EL GANADOR DE LA RONDA ES " << nombres[pos].nombre << "!!!!!" << " con " << puntaje << " puntos." <<endl;
 	
 	//carga y lectura del archivo binario
-	
+	cout << "------ARCHIVO------" << endl;
 	
 	jugada highscore;
 	
@@ -634,7 +727,6 @@ int main() {
 	fseek(f, -sizeof(jugada),SEEK_END);
 	
 	if(fread(&highscore, sizeof(jugada),1,f)){
-		cout << "ESTOY EN EL IF" << endl;
 		id = highscore.idJugada + 1;
 	}
 	highscore.idJugada = id;
@@ -654,19 +746,35 @@ int main() {
 	
 	f = fopen("generalaHighscores.dat","r+b");
 	while(fread(&highscore, sizeof(jugada),1,f)){
-		cout << "id: " << highscore.idJugada << endl << "nombre: " << highscore.nombre.nombre << endl << "fecha: " << highscore.fecha.dia << "/" << highscore.fecha.mes << "/" << highscore.fecha.anio << endl << "puntaje: " << highscore.puntaje << endl << endl;		
+		cout << endl << "id: " << highscore.idJugada << endl << "nombre: " << highscore.nombre.nombre << endl << "fecha: " << highscore.fecha.dia << "/" << highscore.fecha.mes << "/" << highscore.fecha.anio << endl << "puntaje: " << highscore.puntaje << endl << endl;		
 	}
 	fclose(f);
 	
 	//creación y actualización del ranking de los 3 mejores
 	
 	f = fopen("generalaHighscores.dat","r+b");
-	while(fread(&highscore, sizeof(jugada),1,f)){
+	
 	nodo* lista = NULL;
-	cargarSinRepetir(lista,highscore);
+		
+	
+	while(fread(&highscore, sizeof(jugada),1,f)){	
+
+		cargarSinRepetir(lista,highscore);
+
 	}
 	fclose(f);
+	
+	//muestra de la lista de ranking
+	jugada aux2;
 
+	cout << "-----RANKING TOP 3-----" << endl;
+	int k = 0;
+	while(lista != NULL && k!=3){
+		aux2 = pop(lista);
+		cout << "id: " << aux2.idJugada << endl << "nombre: " << aux2.nombre.nombre << endl << "fecha: " << aux2.fecha.dia << "/" << aux2.fecha.mes << "/" << aux2.fecha.anio << endl << "puntaje: " << aux2.puntaje << endl << endl;
+		cout << endl << "-----------------------" << endl;
+		k++;
+	}
 
 	return 0;
 }
